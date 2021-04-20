@@ -1,11 +1,32 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from './axios'
 
-function Row() {
+function Row( {title, fetchUrl} ) {
+    const [movies, setMovies] =  useState([]);
+
+    // A snippet of code which runs based on a specific condition/variable
+    useEffect(() => {
+        async function fetchData() {
+            const request =  await axios.get(fetchUrl);
+            console.table(request.data.results);
+            setMovies(request.data.results)
+            return request
+        }
+        fetchData ()
+
+    }, [fetchUrl]);
+
     return (
-        <div>
-            {/* title */}
+        <div className="row" >
+            <h2> {title} </h2>
 
-            {/* Posters */}
+            <div className="rowPosters">
+                 {/* Posters */}
+
+                 {movies.map(movie => (
+                     <img src={movie.poster_path} alt={movie.name} />
+                 ))}
+            </div>
         </div>
     )
 }
